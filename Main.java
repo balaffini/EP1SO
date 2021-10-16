@@ -5,7 +5,7 @@ public class Main {
     public static void main(String[] args) {
         File logFile = new File("logFile.txt");
         try {
-            Processo p = new Processo("src/programas/01.txt", logFile, 3);
+            Processo p = new Processo("EP1SO/programas/01.txt", logFile, 3);
             while(p.executa());
         } catch(IOException ex){
             System.out.println("Arquivo não encontrado");
