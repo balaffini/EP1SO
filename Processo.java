@@ -10,19 +10,6 @@ public class Processo {
     FileWriter fileWriter;
     PrintWriter printWriter;
 
-    /*public Processo(String filePath, File logFile) throws IOException {
-        fileWriter = new FileWriter(logFile);
-        printWriter = new PrintWriter(fileWriter);
-        p = new Programa(filePath);
-        this.logFile = logFile;
-        pc = 0;
-        x = 0;
-        y = 0;
-        estado = 0;
-        nome = p.getName();
-        printWriter.print("Carregando " + nome);
-    }*/
-
     public Processo(String filePath, File logFile, int quantum) throws IOException {
         fileWriter = new FileWriter(logFile);
         printWriter = new PrintWriter(fileWriter);
@@ -37,7 +24,7 @@ public class Processo {
         printWriter.append("Carregando " + nome + "\n");
     }
 
-    public boolean executa(/*int quantum*/){
+    public boolean executa(){
         printWriter.append("Executando " + nome + "\n");
         estado = 1;
         for (int i = 1; i <= quantum; i++) {
