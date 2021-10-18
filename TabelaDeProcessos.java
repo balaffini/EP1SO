@@ -11,7 +11,6 @@ public class TabelaDeProcessos {
     private BCP executando;
     private int quantum, cntInterrupcoes, qntTrocas, qntComandos;
 
-    private File logFile;
     private FileWriter fileWriter;
     private PrintWriter printWriter;
 
@@ -24,8 +23,7 @@ public class TabelaDeProcessos {
         this.quantum = quantum;
 
         fileWriter = new FileWriter(logFile);
-        printWriter = new PrintWriter(fileWriter);;
-        this.logFile = logFile;
+        printWriter = new PrintWriter(fileWriter);
     }
 
     public void adicionaProcesso(String filePath) throws IOException {

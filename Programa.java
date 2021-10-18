@@ -1,7 +1,5 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class Programa {
@@ -15,27 +13,26 @@ public class Programa {
         name = scan.nextLine();
     }
 
-    protected int proxComando(Processo p){
+    protected int proxComando(BCP p){
         if(!scan.hasNext())
             return -2;
         p.incrementa();
         String comando = scan.nextLine();
         switch(comando.charAt(0)) {
-            //case 'C':
-            //    return 0;
+            case 'C':
+                return 1;
             case 'E':
-                return -1;
+                return 2;
             case 'X':
                 p.setX(Integer.parseInt(comando.substring(2)));
-                return 1;
+                return 3;
             case 'Y':
                 p.setY(Integer.parseInt(comando.substring(2)));
-                return 2;
+                return 4;
             case 'S':
-                return -2;
-            default:
-                return 0;
+                return 5;
         }
+        return 0;
     }
 
     protected String getName(){
