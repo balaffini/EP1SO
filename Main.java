@@ -15,7 +15,7 @@ public class Main {
             else
                 logFile = new File("logFile" + quantum + ".txt");
 
-            TabelaDeProcessos tb = new TabelaDeProcessos(logFile, quantum);
+            Escalonador tb = new Escalonador(logFile, quantum);
             tb.adicionaProcesso("src/programas/01.txt");
             tb.adicionaProcesso("src/programas/02.txt");
             tb.adicionaProcesso("src/programas/03.txt");

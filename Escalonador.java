@@ -4,20 +4,20 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 
-public class TabelaDeProcessos {
-    private List<BCP> processos;
+public class Escalonador {
+    private List<BCP> tabelaDeProcessos;
     private Queue<BCP> prontos;
-    private Queue<BCP> interrompidos;
+    private Queue<BCP> bloqueados;
     private BCP executando;
     private int quantum, cntInterrupcoes, qntTrocas, qntComandos;
 
     private FileWriter fileWriter;
     private PrintWriter printWriter;
 
-    public TabelaDeProcessos(File logFile, int quantum) throws IOException {
-        processos = new ArrayList<>();
+    public Escalonador(File logFile, int quantum) throws IOException {
+        tabelaDeProcessos = new ArrayList<>();
         prontos = new LinkedList<>();
-        interrompidos = new LinkedList<>();
+        bloqueados = new LinkedList<>();
         qntTrocas = 0;
         qntComandos = 0;
         this.quantum = quantum;
@@ -28,13 +28,13 @@ public class TabelaDeProcessos {
 
     public void adicionaProcesso(String filePath) throws IOException {
         BCP p = new BCP(filePath);
-        processos.add(p);
+        tabelaDeProcessos.add(p);
         prontos.add(p);
         printWriter.append("Carregando " + p.getNome() + "\n");
     }
 
     public void executa(){
-        while(!processos.isEmpty()) {
+        while(!tabelaDeProcessos.isEmpty()) {
             while(prontos.isEmpty())
                 contaProcessos();
             executando = prontos.remove();
@@ -75,26 +75,28 @@ public class TabelaDeProcessos {
     }
 
     private void interrompe(){
-        executando.setEstado("Interrompido");
-        if(interrompidos.isEmpty())
+        executando.setEstado("Bloqueado");
+        if(bloqueados.isEmpty())
             cntInterrupcoes = 0;
-        interrompidos.add(executando);
+            bloqueados.add(executando);
         qntTrocas++;
     }
 
     private void contaProcessos(){
         cntInterrupcoes++;
-        if(!interrompidos.isEmpty() && cntInterrupcoes == 2){
-            prontos.add(interrompidos.remove());
+        if(!bloqueados.isEmpty() && cntInterrupcoes == 2){
+            BCP p = bloqueados.remove();
+            prontos.add(p);
+            p.setEstado("Pronto");
             cntInterrupcoes = 0;
-            if(!interrompidos.isEmpty())
+            if(!bloqueados.isEmpty())
                 cntInterrupcoes = 1;
         }
     }
 
     private void encerraProcesso(){
         qntTrocas++;
-        processos.remove(executando);
+        tabelaDeProcessos.remove(executando);
         executando.setEstado("Encerrado");
         printWriter.append(executando.getNome() + " terminado. X=" + executando.getX() + ". Y=" + executando.getY() + "\n");
     }
