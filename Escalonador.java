@@ -63,6 +63,7 @@ public class Escalonador {
                     printWriter.append("Interrompendo " + executando.getNome() + " apos " + quantum + " instrucoes\n");
                     prontos.add(executando);
                     executando.setEstado("pronto");
+                    qntTrocas++;
                 }
             }
             contaProcessos();
