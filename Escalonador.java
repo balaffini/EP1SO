@@ -102,7 +102,7 @@ public class Escalonador {
 
     public static void main(String[] args) {
         try {
-            File quantumFile = new File("src/programas/quantum.txt");
+            File quantumFile = new File("programas/quantum.txt");
             Scanner scan = new Scanner(quantumFile);
             int quantum = scan.nextInt();
 
@@ -113,7 +113,7 @@ public class Escalonador {
                 logFile = new File("logFile" + quantum + ".txt");
 
             Escalonador tb = new Escalonador(logFile, quantum);
-            File folder = new File("src/programas");
+            File folder = new File("programas");
             File files[] = folder.listFiles();
             Arrays.sort(files);
             for (int i = 0; i < files.length-1; i++) {
