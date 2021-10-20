@@ -49,6 +49,10 @@ public class BCP {
         this.y = y;
     }
 
+    public int getTempoDeEspera() {
+        return tempoDeEspera;
+    }
+
     public void setTempoDeEspera(int tempoDeEspera) {
         this.tempoDeEspera = tempoDeEspera;
     }

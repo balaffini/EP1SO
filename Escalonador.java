@@ -76,19 +76,17 @@ public class Escalonador {
     private void interrompe(){
         executando.setEstado("bloqueado");
         bloqueados.add(executando);
-        executando.setTempoDeEspera(2);
+        executando.setTempoDeEspera(3);
         qntTrocas++;
     }
 
     private void contaProcessos(){
-        Iterator<BCP> it = bloqueados.iterator();
-        while(it.hasNext()){
-            bloqueados.forEach((p) -> {
-                if(p.decrementaEspera() == 0) {
-                    p.setEstado("pronto");
-                    prontos.add(bloqueados.remove());
-                }
-            });
+        if(!bloqueados.isEmpty()){
+            bloqueados.forEach(BCP::decrementaEspera);
+            if(bloqueados.element().getTempoDeEspera() == 0){
+                bloqueados.element().setEstado("pronto");
+                prontos.add(bloqueados.remove());
+            }
         }
     }
 
