@@ -9,7 +9,7 @@ public class Escalonador {
     private Queue<BCP> prontos;
     private Queue<BCP> bloqueados;
     private BCP executando;
-    private int quantum, cntInterrupcoes, qntTrocas, qntComandos;
+    private int quantum, qntTrocas, qntComandos;
 
     private FileWriter fileWriter;
     private PrintWriter printWriter;
@@ -38,11 +38,9 @@ public class Escalonador {
             while(prontos.isEmpty())
                 contaProcessos();
             executando = prontos.remove();
-            executando.setEstado("Executando");
+            executando.setEstado("executando");
             printWriter.append("Executando " + executando.getNome() + "\n");
-            int i;
-            for(i = 1; i <= quantum; i++) {
-                contaProcessos();
+            for(int i = 1; i <= quantum; i++) {
                 qntComandos++;
                 switch(executando.executa()){
                     case 1: //COM
@@ -64,40 +62,66 @@ public class Escalonador {
                 }
                 if(i == quantum) {
                     printWriter.append("Interrompendo " + executando.getNome() + " apos " + quantum + " instrucoes\n");
-                    interrompe();
+                    prontos.add(executando);
+                    executando.setEstado("pronto");
                 }
             }
+            contaProcessos();
         }
-        printWriter.append("MEDIA DE TROCAS: " + (qntTrocas) + "\n");
+        printWriter.append("MEDIA DE TROCAS: " + (qntTrocas)/10 + "\n");
         printWriter.append("MEDIA DE INSTRUCOES: " + ((double)qntComandos/(double)(qntTrocas)) + "\n");
         printWriter.append("QUANTUM: " + quantum + "\n");
         printWriter.close();
     }
 
     private void interrompe(){
-        executando.setEstado("Bloqueado");
-        if(bloqueados.isEmpty())
-            cntInterrupcoes = 0;
-            bloqueados.add(executando);
+        executando.setEstado("bloqueado");
+        bloqueados.add(executando);
+        executando.setTempoDeEspera(2);
         qntTrocas++;
     }
 
     private void contaProcessos(){
-        cntInterrupcoes++;
-        if(!bloqueados.isEmpty() && cntInterrupcoes == 2){
-            BCP p = bloqueados.remove();
-            prontos.add(p);
-            p.setEstado("Pronto");
-            cntInterrupcoes = 0;
-            if(!bloqueados.isEmpty())
-                cntInterrupcoes = 1;
+        Iterator<BCP> it = bloqueados.iterator();
+        while(it.hasNext()){
+            bloqueados.forEach((p) -> {
+                if(p.decrementaEspera() == 0) {
+                    p.setEstado("pronto");
+                    prontos.add(bloqueados.remove());
+                }
+            });
         }
     }
 
     private void encerraProcesso(){
         qntTrocas++;
         tabelaDeProcessos.remove(executando);
-        executando.setEstado("Encerrado");
+        executando.setEstado("encerrado");
         printWriter.append(executando.getNome() + " terminado. X=" + executando.getX() + ". Y=" + executando.getY() + "\n");
+    }
+
+    public static void main(String[] args) {
+        try {
+            File quantumFile = new File("src/programas/quantum.txt");
+            Scanner scan = new Scanner(quantumFile);
+            int quantum = scan.nextInt();
+
+            File logFile;
+            if(quantum < 10)
+                logFile = new File("logFile0" + quantum + ".txt");
+            else
+                logFile = new File("logFile" + quantum + ".txt");
+
+            Escalonador tb = new Escalonador(logFile, quantum);
+            File folder = new File("src/programas");
+            File files[] = folder.listFiles();
+            Arrays.sort(files);
+            for (int i = 0; i < files.length-1; i++) {
+                tb.adicionaProcesso(files[i].getPath());
+            }
+            tb.executa();
+        } catch(IOException ex){
+            System.out.println("Arquivo não encontrado");
+        }
     }
 }
