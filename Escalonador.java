@@ -9,7 +9,7 @@ public class Escalonador {
     private Queue<BCP> prontos;
     private Queue<BCP> bloqueados;
     private BCP executando;
-    private int quantum, qntTrocas, qntComandos;
+    private int quantum, qntTrocas, qntComandos, qntProcessos;
 
     private FileWriter fileWriter;
     private PrintWriter printWriter;
@@ -20,6 +20,7 @@ public class Escalonador {
         bloqueados = new LinkedList<>();
         qntTrocas = 0;
         qntComandos = 0;
+        qntProcessos = 0;
         this.quantum = quantum;
 
         fileWriter = new FileWriter(logFile);
@@ -31,6 +32,7 @@ public class Escalonador {
         tabelaDeProcessos.add(p);
         prontos.add(p);
         printWriter.append("Carregando " + p.getNome() + "\n");
+        qntProcessos++;
     }
 
     public void executa(){
@@ -68,7 +70,7 @@ public class Escalonador {
             }
             contaProcessos();
         }
-        printWriter.append("MEDIA DE TROCAS: " + (qntTrocas)/10 + "\n");
+        printWriter.append("MEDIA DE TROCAS: " + (qntTrocas/qntProcessos) + "\n");
         printWriter.append("MEDIA DE INSTRUCOES: " + ((double)qntComandos/(double)(qntTrocas)) + "\n");
         printWriter.append("QUANTUM: " + quantum + "\n");
         printWriter.close();
