@@ -68,7 +68,7 @@ public class Escalonador {
             }
             contaProcessos();
         }
-        printWriter.append("MEDIA DE TROCAS: " + (qntTrocas/qntProcessos) + "\n");
+        printWriter.append("MEDIA DE TROCAS: " + ((double)qntTrocas/(double)qntProcessos) + "\n");
         printWriter.append("MEDIA DE INSTRUCOES: " + ((double)qntComandos/(double)(qntTrocas)) + "\n");
         printWriter.append("QUANTUM: " + quantum + "\n");
         printWriter.close();

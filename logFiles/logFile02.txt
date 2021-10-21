@@ -199,6 +199,6 @@ Interrompendo TESTE-2 apos 2 instrucoes
 Executando TESTE-2
 Interrompendo TESTE-2 apos 2 instrucoes
 TESTE-2 terminado. X=9. Y=1
-MEDIA DE TROCAS: 7
+MEDIA DE TROCAS: 7.9
 MEDIA DE INSTRUCOES: 1.759493670886076
 QUANTUM: 2
